@@ -1,34 +1,14 @@
 import importlib
 import time
 from config import config
-import matplotlib.pyplot as plt
-
-
-def show_chart(data):
-    plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置全局字体为黑体
-    plt.rcParams['axes.unicode_minus'] = False  # 解决负号无法显示的问题
-
-    x = data['所属行业']
-    y = data['金额']
-    plt.bar(x, y)
-
-    plt.title('行业日成交量汇总')
-    plt.xlabel('所属行业')
-    plt.ylabel('金额（万元）')
-    # 关闭y轴的科学计数法
-    plt.ticklabel_format(style='plain', axis='y')
-
-    # 设置 x 轴文字纵向排列
-    plt.xticks(rotation=90)
-    plt.show()
-
 
 if __name__ == '__main__':
     # 记录开始时间
     start_time = time.time()
 
-    file_name = "2023-04-10"
+    file_name = "2023-04-12"
 
+    # load config module
     processor_class = getattr(importlib.import_module(config.system_config.data_preprocessor_module),
                               config.system_config.data_preprocessor_class)
     processor = processor_class(file_name)
@@ -36,12 +16,15 @@ if __name__ == '__main__':
 
     grouped = df.groupby('所属行业')
     result = grouped.agg({'金额': ['sum', 'count']}).sort_values(by=('金额', 'sum'), ascending=False)
+    result.columns = ['总成交量（万元）', '该行业股票个数']
+    result['平均成交量（万元）'] = result['总成交量（万元）'] / result['该行业股票个数']
+
+    # data format
+    result['总成交量（万元）'] = result['总成交量（万元）'].round(0)
+    result['平均成交量（万元）'] = result['平均成交量（万元）'].round(0)
 
     output_file_path = config.system_config.data_output + file_name + '.csv'
     result.to_csv(output_file_path, encoding='gbk')
-
-    # 显示图表
-    # show_chart(df)
 
     # 记录结束时间
     end_time = time.time()

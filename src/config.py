@@ -11,4 +11,4 @@ class Config:
 
 
 # 全局配置文件
-config = Config('config/config.json')
+config = Config('../config/config.json')
