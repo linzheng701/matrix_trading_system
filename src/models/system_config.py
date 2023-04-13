@@ -8,6 +8,7 @@ class SystemConfig:
     data_raw: str
     data_preprocessor_module: str
     data_preprocessor_class: str
+    daily_dir: str
 
 
 @dataclass

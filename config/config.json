@@ -3,6 +3,7 @@
     "data_output": "../data/output/",
     "data_processed": "../data/processed/",
     "data_raw": "../data/raw/",
+    "daily_dir": "daily",
     "data_preprocessor_module": "core.preprocessor.EastMoneyTableProcessor",
     "data_preprocessor_class": "EastMoneyTableProcessor"
   },
