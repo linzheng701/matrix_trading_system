@@ -1,5 +1,6 @@
 import importlib
 import time
+import os
 from config import config
 import pandas as pd
 import numpy as np
@@ -19,7 +20,7 @@ def get_base_volatility(code):
 
 
 def statistics_industry_vol():
-    file_name = "2023-04-12"
+    file_name = time.strftime("%Y-%m-%d", time.localtime())
 
     # load config module
     processor_class = getattr(importlib.import_module(config.system_config.data_preprocessor_module),
@@ -40,7 +41,7 @@ def statistics_industry_vol():
     result.to_csv(output_file_path, encoding='gbk')
 
 
-if __name__ == '__main__':
+def test():
     # 记录开始时间
     start_time = time.time()
 
@@ -61,3 +62,7 @@ if __name__ == '__main__':
     # 计算运行时间并输出
     run_time = end_time - start_time
     print(f"Program finished in {run_time:.2f} seconds.")
+
+
+if __name__ == '__main__':
+    statistics_industry_vol()
