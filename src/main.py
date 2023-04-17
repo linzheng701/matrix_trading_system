@@ -1,6 +1,5 @@
 import importlib
 import time
-import os
 from config import config
 import pandas as pd
 import numpy as np
@@ -11,10 +10,10 @@ def get_base_volatility(code):
     stock_data = pd.read_csv(f'../data/raw/daily/{code}.csv')
 
     # 计算对数收益率
-    stock_data['log_return'] = np.log(stock_data['收盘']) - np.log(stock_data['收盘'].shift(1))
+    returns = np.diff(stock_data['收盘']) / stock_data['收盘'][:-1]
 
     # 计算股票波动率(放大100倍)
-    volatility = np.sqrt(252) * np.std(stock_data['log_return']) * 100
+    volatility = np.sqrt(252) * np.std(returns) * 100
 
     print(code, '波动率为:', round(volatility, 2))
 
@@ -41,6 +40,29 @@ def statistics_industry_vol():
     result.to_csv(output_file_path, encoding='gbk')
 
 
+def calc_beta(data_benchmark, data_comparison, period=252):
+    # data_benchmark表示基准股票的历史价格数据，data_comparison表示需要对照股票的历史价格数据
+
+    if len(data_benchmark) < period or len(data_comparison) < period:
+        print("period is to long")
+        return
+
+    # 计算基准和对照的收益率
+    benchmark = data_benchmark[0:period].pct_change()
+    comparison = data_comparison[0:period].pct_change()
+    benchmark = np.nan_to_num(benchmark, nan=0)
+    comparison = np.nan_to_num(comparison, nan=0)
+
+    # 计算基准和对照的收益率之间的协方差和对照的收益率的方差
+    covariance = np.cov(benchmark, comparison)[0][1]
+    variance_b = np.var(comparison)
+
+    # 计算beta值
+    beta = covariance / variance_b
+
+    print("Beta值为：", beta)
+
+
 def test():
     # 记录开始时间
     start_time = time.time()
@@ -65,4 +87,7 @@ def test():
 
 
 if __name__ == '__main__':
-    statistics_industry_vol()
+    # 沪深300为基准
+    stock_benchmark = pd.read_csv(f'../data/raw/daily/399300.csv')
+    stock_data = pd.read_csv(f'../data/raw/daily/002174.csv')
+    calc_beta(stock_benchmark['收盘'], stock_data['收盘'])
