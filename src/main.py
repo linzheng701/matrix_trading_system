@@ -1,5 +1,6 @@
 import importlib
 import time
+from util.data_downloader import *
 from config import config
 import pandas as pd
 import numpy as np
@@ -87,7 +88,10 @@ def test():
 
 
 if __name__ == '__main__':
+    # get_stock_realtime_info()
+    get_stock_profile('000001')
+    # get_hs300_stock_list()
     # 沪深300为基准
-    stock_benchmark = pd.read_csv(f'../data/raw/daily/399300.csv')
-    stock_data = pd.read_csv(f'../data/raw/daily/002174.csv')
-    calc_beta(stock_benchmark['收盘'], stock_data['收盘'])
+    # stock_benchmark = pd.read_csv(f'../data/raw/daily/399300.csv')
+    # stock_data = pd.read_csv(f'../data/raw/daily/002174.csv')
+    # calc_beta(stock_benchmark['收盘'], stock_data['收盘'])
