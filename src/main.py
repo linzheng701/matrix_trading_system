@@ -88,8 +88,9 @@ def test():
 
 
 if __name__ == '__main__':
+    statistics_industry_vol()
     # get_stock_realtime_info()
-    get_stock_profile('000001')
+    # get_stock_profile('000001')
     # get_hs300_stock_list()
     # 沪深300为基准
     # stock_benchmark = pd.read_csv(f'../data/raw/daily/399300.csv')

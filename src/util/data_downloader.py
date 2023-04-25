@@ -1,4 +1,5 @@
 import akshare as ak
+from src.core.database.creater import *
 
 
 def get_hs300_stock_list():
@@ -21,4 +22,18 @@ def get_stock_history_info(symbol, end_date):
 
 def get_stock_profile(symbol):
     stock_profile_cninfo_df = ak.stock_profile_cninfo(symbol=symbol)
-    print(stock_profile_cninfo_df)
+    stock_profile_cninfo_df = stock_profile_cninfo_df.rename(columns={
+        '公司名称': 'companyName', '英文名称': 'englishName', '曾用简称': 'usedName', 'A股代码': 'code',
+        'A股简称': 'name', 'B股代码': 'bCode', 'B股简称': 'bShortName', 'H股代码': 'hCode',
+        'H股简称': 'hShortName', '入选指数': 'indexInclusion', '所属市场': 'market', '所属行业': 'industry',
+        '法人代表': 'lr', '注册资金': 'registeredCapital', '成立日期': 'dataOfEstablishment', '上市日期': 'listingData',
+        '官方网站': 'website', '电子邮箱': 'email', '联系电话': 'tel', '传真': 'fax',
+        '注册地址': 'registeredAddress', '办公地址': 'officeAddress', '邮政编码': 'postalCode',
+        '主营业务': 'mainBusiness',
+        '经营范围': 'businessScope', '机构简介': 'introduction'
+    })
+    stock_profile_cninfo_df.fillna("", inplace=True)
+    info = dataframe_to_models(stock_profile_cninfo_df, StockProfileInfo)
+    with db.atomic():
+        StockProfileInfo.bulk_create(info)
+    print("下载基础数据完成")
