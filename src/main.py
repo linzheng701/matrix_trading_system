@@ -1,6 +1,7 @@
 import importlib
 import time
-from util.data_downloader import *
+from core.database.creater import *
+from util.bond_downloader import *
 from config import config
 import pandas as pd
 import numpy as np
@@ -88,7 +89,9 @@ def test():
 
 
 if __name__ == '__main__':
-    statistics_industry_vol()
+    # create_tables()
+    bond_realtime_info()
+    # statistics_industry_vol()
     # get_stock_realtime_info()
     # get_stock_profile('000001')
     # get_hs300_stock_list()

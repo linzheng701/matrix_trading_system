@@ -10,6 +10,42 @@ db = SqliteDatabase('../data/db/base')
 db.connect()
 
 
+class BondDaily(Model):
+    symbol = CharField()
+    code = CharField()
+    date = CharField()
+    open = CharField()
+    high = CharField()
+    low = CharField()
+    close = CharField()
+    volume = CharField()
+
+    class Meta:
+        database = db
+
+
+# 可转债实时数据
+class BondReadtimeInfo(Model):
+    symbol = CharField()
+    name = CharField()
+    trade = CharField()
+    pricechange = CharField()
+    changepercent = CharField()
+    buy = CharField()
+    sell = CharField()
+    settlement = CharField()
+    open = CharField()
+    high = CharField()
+    low = CharField()
+    volume = CharField()
+    amount = CharField()
+    code = CharField()
+    ticktime = CharField()
+
+    class Meta:
+        database = db
+
+
 # 公司概况
 class StockProfileInfo(Model):
     companyName = CharField()
@@ -48,4 +84,4 @@ def dataframe_to_models(df, model_class):
 
 
 def create_tables():
-    db.create_tables([StockProfileInfo])
+    db.create_tables([BondDaily])

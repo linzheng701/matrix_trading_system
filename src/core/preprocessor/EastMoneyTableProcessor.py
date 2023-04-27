@@ -25,6 +25,10 @@ class EastMoneyTableProcessor(BaseProcessor):
         # 空字段替换为零
         contains_empty = df['金额'].str.contains('—')
 
+        contains_yi = contains_yi.fillna(method='ffill')
+        contains_wang = contains_wang.fillna(method='ffill')
+        contains_empty = contains_empty.fillna(method='ffill')
+
         # 替换
         df.loc[contains_empty, '金额'] = 0.0
         df.loc[contains_yi, '金额'] = df.loc[contains_yi, '金额'].str.replace('亿', '').astype(float) * 10000
